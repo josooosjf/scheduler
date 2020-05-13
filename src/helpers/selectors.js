@@ -15,18 +15,38 @@ export function getAppointmentsForDay(state, day) {
             result.push(val)
           }
         }
-        
-       
-
       })
     }
   
-  
-  
   return result
 
-    
-
-
 };
+
+export function getInterview(state, interview) {
+
+  if (!interview) {
+    return null
+  }
+
+  const result = {}
+
+  
+
+  const values = Object.values(state.interviewers)
+
+
+  for (let val of values) {
+    if (val.id === interview.interviewer) {
+
+      result.student = interview.student
+      result.interviewer = val
+     
+    }
+  }
+
+  
+
+return (result)
+
+}
 
