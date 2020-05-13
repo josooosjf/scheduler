@@ -46,10 +46,16 @@ const appointments = [
 
 export default function Application(props) {
 
-  const [day, setDay] = useState('Monday');
 
+  const [state, setState] = useState({
+    day : "Monday",
+    days : [],
+    appointments : {}
+  })
 
-  const [days, setDays] = useState([]);
+  const setDay = day => setState({ ...state, day })
+  const setDays = days => setState(prev => ({ ...prev, days }));
+
  
   // Fetch days with Axios and set days to that
   useEffect(() => {
@@ -67,8 +73,8 @@ export default function Application(props) {
       <hr className="sidebar__separator sidebar--centered" />
       <nav className="sidebar__menu">
         <DayList
-            days={days}
-            day={day}
+            days={state.days}
+            day={state.day}
             setDay={setDay}
         />
       </nav>
@@ -80,8 +86,8 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         <ul>
-        {appointments.map(appointment => {
-          return <Appointment key={appointment.id} {...appointment}/>
+        {appointments.map((appointment,appIndex) => {
+          return <Appointment key={appIndex} {...appointment}/>
         })}
         <Appointment key="last" time="5pm" />
         </ul>
@@ -90,18 +96,5 @@ export default function Application(props) {
   );
   
 }
-
-// return (
-//   <ul>
-//     {days.map(singleDay => {
-//       return <DayListItem 
-//       key={ singleDay.id } 
-//       name={ singleDay.name } 
-//       spots={ singleDay.spots } 
-//       selected={ singleDay.name === day } 
-//       setDay={ () => setDay(singleDay.name) }  />
-//     })}
-//   </ul> 
-//   )
 
 
