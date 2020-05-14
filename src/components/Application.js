@@ -23,6 +23,7 @@ export default function Application(props) {
   const setDay = day => setState({ ...state, day })
 
   const appointmentsArray = getAppointmentsForDay(state, state.day);
+  console.log("appointments array", appointmentsArray)
  
   // Fetch days with Axios and set days to that
   useEffect(() => {
@@ -73,15 +74,28 @@ export default function Application(props) {
         {appointmentsArray.map((appointment,appIndex) => {
           const interview = getInterview(state, appointment.interview)
 
+          if (appIndex === appointmentsArray.length - 1) {
+            return ( 
+              <Appointment 
+                key={appIndex}
+                id={"last"} 
+                {...appointment}
+                interview={interview}
+              />
+              )
+          } else {
+
           return ( 
-          <Appointment 
-            key={appIndex} 
+          <Appointment
+            key={appIndex}
+            id={appIndex} 
             {...appointment}
             interview={interview}
           />
           )
+
+          }
         })}
-        <Appointment key="last" time="5pm" />
         </ul>
       </section>
     </main>

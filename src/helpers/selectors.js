@@ -17,7 +17,6 @@ export function getAppointmentsForDay(state, day) {
         }
       })
     }
-  
   return result
 
 };
@@ -30,10 +29,7 @@ export function getInterview(state, interview) {
 
   const result = {}
 
-  
-
   const values = Object.values(state.interviewers)
-
 
   for (let val of values) {
     if (val.id === interview.interviewer) {
@@ -44,9 +40,30 @@ export function getInterview(state, interview) {
     }
   }
 
-  
-
 return (result)
 
 }
 
+export function getInterviewersForDay(state, day) {
+  const result = []
+  
+  const filteredDay = state.days.filter(stateDay => stateDay.name === day)
+
+  
+    if(state.appointments && filteredDay.length > 0) {
+    const values = Object.values(state.interviewers)
+  
+ 
+      filteredDay[0].interviewers.forEach(app => {
+      
+        for (let val of values) {
+          if (app === val.name) {
+            result.push(val)
+          }
+        }
+      })
+    }
+    console.log("interviewer", result)
+  return result
+
+};
