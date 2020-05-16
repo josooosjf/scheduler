@@ -57,13 +57,12 @@ export function getInterviewersForDay(state, day) {
       filteredDay[0].interviewers.forEach(app => {
       
         for (let val of values) {
-          if (app === val.name) {
+          if (app === val.id) {
             result.push(val)
           }
         }
       })
     }
-    console.log("interviewer", result)
   return result
 
 };

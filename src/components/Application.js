@@ -1,51 +1,41 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 
 import "components/Application.scss";
 import DayList from './DayList'
 import "components/Appointment"
 import Appointment from "components/Appointment";
-import { getAppointmentsForDay, getInterview } from '../helpers/selectors'
-
-
-
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from '../helpers/selectors'
+import useApplicationData from 'hooks/useApplicationData'
 
 
 export default function Application(props) {
 
-  const [state, setState] = useState({
-    day : "Monday",
-    days : [],
-    appointments : {},
-    interviewers : {}
-  })
+  const {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview,
+    editInterview
+  } = useApplicationData();
 
-  const setDay = day => setState({ ...state, day })
+  const interviewers = getInterviewersForDay(state, state.day);
 
-  const appointmentsArray = getAppointmentsForDay(state, state.day);
-  console.log("appointments array", appointmentsArray)
- 
-  // Fetch days with Axios and set days to that
-  useEffect(() => {
+  const appointments = getAppointmentsForDay(state, state.day).map(
+    appointment => {
+      return (
+        <Appointment
+          key={appointment.id}
+          {...appointment}
+          interview={getInterview(state, appointment.interview)}
+          interviewers={interviewers}
+          bookInterview={bookInterview}
+          cancelInterview={cancelInterview}
+          editInterview={editInterview}
+        />
+      );
+    }
+  );
 
-    let URL1 = "http://localhost:8001/api/days";
-    let URL2 = "http://localhost:8001/api/appointments"
-    let URL3 = "http://localhost:8001/api/interviewers"
-  
-    const promise1 = axios.get(URL1);
-    const promise2 = axios.get(URL2);
-    const promise3 = axios.get(URL3)
-  
-    Promise.all([
-      promise1,
-      promise2,
-      promise3
-    ]).then((all) => {
-      setState(prev => ({ ...prev, days : all[0].data, appointments: all[1].data, interviewers : all[2].data}));
-    });
-  }, []);
-
-  
 
   return (
     <main className="layout">
@@ -71,37 +61,13 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         <ul>
-        {appointmentsArray.map((appointment,appIndex) => {
-          const interview = getInterview(state, appointment.interview)
+          {appointments}
 
-          if (appIndex === appointmentsArray.length - 1) {
-            return ( 
-              <Appointment 
-                key={appIndex}
-                id={"last"} 
-                {...appointment}
-                interview={interview}
-              />
-              )
-          } else {
+          <Appointment key="last" time="5pm" /> 
 
-          return ( 
-          <Appointment
-            key={appIndex}
-            id={appIndex} 
-            {...appointment}
-            interview={interview}
-          />
-          )
-
-          }
-        })}
         </ul>
       </section>
     </main>
   );
   
 }
-
-
- // const setDays = days => setState(prev => ({ ...prev, days }));

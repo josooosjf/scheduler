@@ -5,20 +5,20 @@ import Button from 'components/Button';
 export default function Form(props) {
   // took our interviewer and name and put them in state. is this correct?
 
-  const {interviewers, onSave, onCancel } = props
+  const {interviewers, onSave, onCancel, theInterviewer, theName } = props
 
-  const [interviewer, setInterviewer] = useState(props.interviewer || null);
-  const [name, setName] = useState(props.name || "");
+  const [interviewer, setInterviewer] = useState(theInterviewer || null);
+  const [name, setName] = useState(theName || "");
   const reset = () => {
     setName("");
     setInterviewer(null);
   };
   const cancel = () => {
     reset();
-    props.onCancel()
+    onCancel()
   };
   const validate = () => { 
-    props.onSave(name,interviewer)
+    onSave(name,interviewer)
   }
 
   return (
