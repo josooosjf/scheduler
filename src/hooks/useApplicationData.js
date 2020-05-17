@@ -18,10 +18,12 @@ export default function useApplicationData() {
         for(const appId of day.appointments) {
           if(!appointments[appId].interview) {
             newDay.spots++;
+            console.log(newDay)
           }
         } 
         newDays.push(newDay);
       }
+      console.log("newDays", newDays)
     return newDays;
   }
   const setDay = day => setState({ ...state, day })
@@ -44,9 +46,9 @@ export default function useApplicationData() {
       {interview}
     )
     .then( function (res) { 
-      console.log(getDaysWithSpots(state.days, state.appointments))
-
-      setState((state) => {return {...state, appointments}} )
+        let days = getDaysWithSpots(state.days, appointments)
+                
+      setState((state) => {return {...state, appointments, days}} )
     })
   };
 
@@ -70,24 +72,10 @@ export default function useApplicationData() {
         `http://localhost:8001/api/appointments/${id}`
       )
       .then( function (res) { 
-        const daysCopy = [...state.days]
-         state.days = daysCopy.map(value => { 
-            if (value.name === state.day) {
-              return {
-                ...value,
-                spots : value.spots + 1
+        let days = getDaysWithSpots(state.days, appointments)
                 
-              } 
-              
-            } else {
-              return {
-                ...value
-              }
-            }
-        })
-  
-        setState((state) => {return {...state, appointments}} )
-      })
+      setState((state) => {return {...state, appointments, days}} )
+    })
   };
 
   useEffect(() => {
