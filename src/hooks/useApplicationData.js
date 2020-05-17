@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react";
+import {  useEffect, useReducer } from "react";
 import axios from "axios";
+// import { act } from "@testing-library/react";
 
 export default function useApplicationData() {
 
-  const [state, setState] = useState({
-    day : "Monday",
-    days : [],
-    appointments : {},
-    interviewers : {},
-  })
+  const SET_DAY = "SET_DAY";
+  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
+  const SET_INTERVIEW = "SET_INTERVIEW";
+  const DELETE_INTERVIEW = "DELETE_INTERVIEW";
 
   const getDaysWithSpots = function(days, appointments) {
     const newDays = [] 
@@ -26,29 +25,80 @@ export default function useApplicationData() {
       console.log("newDays", newDays)
     return newDays;
   }
-  const setDay = day => setState({ ...state, day })
+
+  function reducer (state, action) {
+    switch(action.type) {
+      case SET_DAY: 
+        return ({...state, day : action.day });
+      case SET_APPLICATION_DATA:
+        return  { ...state, days :action.all[0].data, appointments: action.all[1].data, interviewers : action.all[2].data}
+      case SET_INTERVIEW: {
+         const appointment = {
+          ...state.appointments[action.id],
+          interview: { ...action.interview }
+        };
+        
+        const appointments = {
+          ...state.appointments,
+          [action.id]: appointment
+        };
+
+        let days = getDaysWithSpots(state.days, appointments)
+
+        return {...state, appointments, days}
+    
+      }
+      case DELETE_INTERVIEW: 
+        const appointment = {
+          ...state.appointments[action.id],
+          interview: null
+        }
+    
+        const appointments = {
+          ...state.appointments,
+          [action.id] : appointment
+        };
+    
+        let days = getDaysWithSpots(state.days, appointments)
+
+        return {...state, appointments, days}
+      
+    default: 
+      throw new Error(
+        `Tried to reduce with unsupported action type: ${action.type}`
+      );
+    }
+  }
+
+    const initial = {
+      day : "Monday",
+      days : [],
+      appointments : {},
+      interviewers : {},
+    }
+
+    const [state, dispatch] = useReducer(reducer, initial)
+
+
+  const setDay = (day) => {
+  dispatch({ type: SET_DAY, day });
+  }
+
+
+ 
+
+  
 
 
   const bookInterview = (id, interview) => {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-    
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-
+   
     return axios
     .put(
       `http://localhost:8001/api/appointments/${id}`,
       {interview}
     )
     .then( function (res) { 
-        let days = getDaysWithSpots(state.days, appointments)
-                
-      setState((state) => {return {...state, appointments, days}} )
+        dispatch({type: SET_INTERVIEW, id, interview})
     })
   };
 
@@ -57,24 +107,14 @@ export default function useApplicationData() {
   const cancelInterview = (id, interview) => {
     console.log("interview", interview)
 
-    const appointment = {
-      ...state.appointments[id],
-      interview: null
-    }
-
-    const appointments = {
-      ...state.appointments,
-      [id] : appointment
-    };
 
     return axios  
       .delete(
         `http://localhost:8001/api/appointments/${id}`
       )
       .then( function (res) { 
-        let days = getDaysWithSpots(state.days, appointments)
-                
-      setState((state) => {return {...state, appointments, days}} )
+       
+      dispatch({type: DELETE_INTERVIEW, id, interview})
     })
   };
 
@@ -93,7 +133,7 @@ export default function useApplicationData() {
       promise2,
       promise3
     ]).then((all) => {
-      setState(prev => ({ ...prev, days : all[0].data, appointments: all[1].data, interviewers : all[2].data}));
+      dispatch({ type: SET_APPLICATION_DATA, all });
     });
   }, []);
 
@@ -110,18 +150,3 @@ export default function useApplicationData() {
 
 }
 
-// const daysCopy = [...state.days]
-// state.days = daysCopy.map(value => { 
-//    if (value.name === state.day) {
-//      return {
-//        ...value,
-//        spots : value.spots - 1
-       
-//      } 
-     
-//    } else {
-//      return {
-//        ...value
-//      }
-//    }
-// })
