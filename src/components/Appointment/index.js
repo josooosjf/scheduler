@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "components/Appointment/styles.scss"
 import Header from 'components/Appointment/Header'
 import Show from "components/Appointment/Show"
@@ -25,6 +25,15 @@ export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     interview !== null ? SHOW : EMPTY
   );
+
+  useEffect(() => {
+    if (interview && mode === EMPTY) {
+     transition(SHOW);
+    }
+    if (interview === null && mode === SHOW) {
+     transition(EMPTY);
+    }
+   }, [interview, transition, mode]);
 
 
   const save = (name, interviewer) => {
