@@ -52,17 +52,20 @@ export function getInterviewersForDay(state, day) {
   
     if(state.appointments && filteredDay.length > 0) {
     const values = Object.values(state.interviewers)
-  
+   
  
       filteredDay[0].interviewers.forEach(app => {
-      
+       
         for (let val of values) {
+         
           if (app === val.id) {
             result.push(val)
           }
         }
       })
     }
+    
   return result
+  
 
 };
