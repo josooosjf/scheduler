@@ -47,7 +47,7 @@ export default function useApplicationData() {
         };
 
         let days = getDaysWithSpots(state.days, appointments)
-
+       
         return {...state, appointments, days}
     
       }
@@ -103,12 +103,12 @@ export default function useApplicationData() {
     .then( function (res) { 
         dispatch({type: SET_INTERVIEW, id, interview})
     })
+  
   };
 
 
 
   const cancelInterview = (id, interview) => {
-    console.log("interview", interview)
 
 
     return axios  
@@ -150,7 +150,6 @@ export default function useApplicationData() {
       console.log(JSON.parse(event.data))
       const stuff = JSON.parse(event.data);
       const type = stuff.type === "SET_INTERVIEW" ? (stuff.interview  ?  stuff.type : DELETE_INTERVIEW) : stuff.type
-      console.log("stuff.type", stuff.type, "type", type)
       dispatch({ type: type, id: stuff.id, interview:stuff.interview})
     }
     

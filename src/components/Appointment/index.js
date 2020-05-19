@@ -49,7 +49,10 @@ export default function Appointment(props) {
 
       bookInterview(id, interview)
         .then(() => transition(SHOW))
-        .catch((res) => transition(ERROR_SAVE, true))
+        .catch((res) => {
+          transition(ERROR_SAVE, true)
+        }
+         )
 
     } else {
       transition(ERROR_SAVE, true);
@@ -74,7 +77,7 @@ export default function Appointment(props) {
   };
 
   const edit = () => {
-    console.log(interview)
+   
     transition(CREATE)
 
   };
@@ -82,7 +85,7 @@ export default function Appointment(props) {
   
 
   return (
-    <article className="appointment"  key={ id } >
+    <article className="appointment" data-testid="appointment"  key={ id } >
       <Header time={time}/>
 
       {mode === CONFIRM && (
