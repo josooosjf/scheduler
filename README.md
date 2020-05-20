@@ -2,6 +2,8 @@
 
 A SPA React scheduler with up to five appointments per day. 
 
+Created using Create React App.
+
 Tested with Jest, StoryBook and Cypress.
 
 Hosted on Heroku. Visit [Scheduler-App](https://zealous-neumann-ca37d5.netlify.app/) to try the Scheduler.
