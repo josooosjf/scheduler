@@ -11,8 +11,11 @@ import Error from "./Error"
 
 
 export default function Appointment(props) {
+
+
   const {id, time, interview, interviewers, bookInterview, cancelInterview,} = props;
 
+  //declare component modes, apply mode based on state
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";

@@ -1,6 +1,7 @@
 import {  useEffect, useReducer } from "react";
 import axios from "axios";
 
+// WebSockets established outside of React component
 let webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL, ["protocolOne", "protocolTwo"])
 
 export default function useApplicationData() {
@@ -10,6 +11,8 @@ export default function useApplicationData() {
   const SET_INTERVIEW = "SET_INTERVIEW";
   const DELETE_INTERVIEW = "DELETE_INTERVIEW";
 
+
+  // function made to update the spots counter
   const getDaysWithSpots = function(days, appointments) {
     const newDays = [] 
       for(const day of days) {
@@ -86,11 +89,6 @@ export default function useApplicationData() {
   }
 
 
- 
-
-  
-
-
   const bookInterview = (id, interview) => {
    
     return axios
@@ -103,7 +101,6 @@ export default function useApplicationData() {
     })
   
   };
-
 
 
   const cancelInterview = (id, interview) => {
@@ -141,9 +138,9 @@ export default function useApplicationData() {
   useEffect(() => {
     webSocket.onmessage = function (event) {
       
-      const stuff = JSON.parse(event.data);
-      const type = stuff.type === "SET_INTERVIEW" ? (stuff.interview  ?  stuff.type : DELETE_INTERVIEW) : stuff.type
-      dispatch({ type: type, id: stuff.id, interview:stuff.interview})
+      const data = JSON.parse(event.data);
+      const type = data.type === "SET_INTERVIEW" ? (data.interview  ?  data.type : DELETE_INTERVIEW) : data.type
+      dispatch({ type: type, id: data.id, interview:data.interview})
     }
     
     return () => webSocket.close()
