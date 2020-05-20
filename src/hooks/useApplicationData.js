@@ -97,7 +97,7 @@ export default function useApplicationData() {
    
     return axios
     .put(
-      `http://localhost:8001/api/appointments/${id}`,
+      `api/appointments/${id}`,
       {interview}
     )
     .then( function (res) { 
@@ -113,7 +113,7 @@ export default function useApplicationData() {
 
     return axios  
       .delete(
-        `http://localhost:8001/api/appointments/${id}`
+        `api/appointments/${id}`
       )
       .then( function (res) { 
        
@@ -123,9 +123,9 @@ export default function useApplicationData() {
 
   useEffect(() => {
 
-    let URL1 = "http://localhost:8001/api/days";
-    let URL2 = "http://localhost:8001/api/appointments"
-    let URL3 = "http://localhost:8001/api/interviewers"
+    let URL1 = "api/days";
+    let URL2 = "api/appointments"
+    let URL3 = "api/interviewers"
   
     const promise1 = axios.get(URL1);
     const promise2 = axios.get(URL2);
