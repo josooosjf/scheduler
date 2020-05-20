@@ -3,7 +3,6 @@ import InterviewerList from 'components/InterviewerList';
 import Button from 'components/Button';
 
 export default function Form(props) {
-  // took our interviewer and name and put them in state. is this correct?
 
   const {interviewers, onSave, onCancel, theInterviewer, theName } = props
 

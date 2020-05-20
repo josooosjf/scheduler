@@ -47,7 +47,6 @@ return (result)
 export function getInterviewersForDay(state, day) {
   const result = []
   
-  // console.log("state", state)
   const filteredDay = state.days.filter(stateDay => stateDay.name === day)
   
     if(state.appointments && filteredDay.length > 0) {

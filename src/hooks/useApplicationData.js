@@ -1,8 +1,6 @@
 import {  useEffect, useReducer } from "react";
 import axios from "axios";
 
-// import { act } from "@testing-library/react";
-
 let webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL, ["protocolOne", "protocolTwo"])
 
 export default function useApplicationData() {
@@ -141,13 +139,8 @@ export default function useApplicationData() {
   }, []);
 
   useEffect(() => {
-    // webSocket.onopen = function (event) {
-    //   webSocket.send("ping")
-    // }
-
     webSocket.onmessage = function (event) {
       
-      console.log(JSON.parse(event.data))
       const stuff = JSON.parse(event.data);
       const type = stuff.type === "SET_INTERVIEW" ? (stuff.interview  ?  stuff.type : DELETE_INTERVIEW) : stuff.type
       dispatch({ type: type, id: stuff.id, interview:stuff.interview})

@@ -20,7 +20,7 @@ describe("Application", () => {
   });
 
   it("loads data, books an interview and reduces the spots remaining for Monday by 1", async () => {
-    const { container, debug } = render(<Application />);
+    const { container } = render(<Application />);
   
     await waitForElement(() => getByText(container, "Archie Cohen"));
   
@@ -109,7 +109,7 @@ describe("Application", () => {
   it("shows the save error when failing to save an appointment", async () => {
 
    axios.put.mockRejectedValueOnce();
-  const { container, debug } = render(<Application />);
+  const { container } = render(<Application />);
   
   await waitForElement(() => getByText(container, "Archie Cohen"));
 

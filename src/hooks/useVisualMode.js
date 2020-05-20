@@ -8,7 +8,6 @@ export default function useVisualMode(initial) {
     if (replace === true) {
       let newHis = [...history]
       newHis.pop()
-      // setHistory( prev => ([...prev.slice(0,prev.length - 1), newMode]))
       setHistory(newHis)
       setMode(newMode)
 
@@ -26,7 +25,6 @@ export default function useVisualMode(initial) {
     }
     const previousMode = newHistory[newHistory.length - 1]
     setHistory(newHistory)
-    setHistory( prev => ([...prev.slice(0,prev.length - 1), previousMode]))
     setMode(previousMode)
   }
 
