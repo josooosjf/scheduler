@@ -1,5 +1,8 @@
 # Interview Scheduler
 
+
+![deleting](https://gyazo.com/01cd776836f295148e9962e9f3981b04)
+
 ## Setup
 
 Install dependencies with `npm install`.
